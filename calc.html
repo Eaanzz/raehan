@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kalkulator Sederhana</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        overflow: hidden;
+      }
+
+      /* Gaya untuk container kalkulator */
+      .container {
+        text-align: center;
+        width: 340px;
+        margin: auto;
+        padding: 20px;
+        border: 2px solid #ccc;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+
+      /* Gaya untuk tombol angka dan operasi */
+      .btn {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+      }
+
+      .angka,
+      .operasi,
+      .samadengan {
+        font-size: 18px;
+        padding: 10px;
+        background-color: #555;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        position: relative;
+      }
+
+      .hapus {
+        font-size: 16px;
+        padding: 10px;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        position: absolute;
+        margin-top: 58px;
+        transition: background-color 0.3s;
+      }
+
+      .angka:hover,
+      .operasi:hover,
+      .samadengan:hover,
+      .hapus {
+        background-color: #444;
+      }
+
+      .samadengan {
+        grid-column: span 4;
+        background-color: #e91e63;
+        font-size: 20px;
+        color: white;
+      }
+
+      .samadengan:hover {
+        background-color: #c2185b;
+      }
+
+      .layar {
+        grid-column: span 4;
+        font-size: 24px;
+        text-align: right;
+        background-color: #222;
+        color: white;
+        border: none;
+        padding: 10px;
+        border-radius: 5px;
+        outline: none;
+      }
+
+      footer {
+        text-align: center;
+        padding: 10px;
+        background-color: #222;
+        border-top: 1px solid #ccc;
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+      }
+
+      footer span {
+        color: #ffffff;
+        font-size: 18px;
+        font-family: "Comic Sans MS", "Comic Sans", cursive;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Kalkulator Sederhana</h1>
+      <div class="btn">
+        <input type="text" id="layar" class="layar" disabled />
+        <br />
+        <button class="angka">1</button>
+        <button class="angka">2</button>
+        <button class="angka">3</button>
+        <button class="angka">4</button>
+        <button class="angka">5</button>
+        <button class="angka">6</button>
+        <button class="angka">7</button>
+        <button class="angka">8</button>
+        <button class="angka">9</button>
+        <button class="angka">0</button>
+        <button class="operasi" data-operasi="+">+</button>
+        <button class="operasi" data-operasi="-">-</button>
+        <button class="operasi" data-operasi="*">*</button>
+        <button class="operasi" data-operasi="/">/</button>
+        <button class="operasi" data-operasi="%">%</button>
+        <button class="hapus" data-operasi="hapus">Hapus</button>
+        <button class="samadengan" data-operasi="=">=</button>
+      </div>
+    </div>
+    <footer>
+      <span>&copy; Raehan Ramadhan | 2023</span>
+    </footer>
+    <script>
+      const layar = document.getElementById("layar");
+      const tombolAngka = document.querySelectorAll(".angka");
+      const tombolOperasi = document.querySelectorAll(".operasi");
+      const hapusButton = document.querySelector(".hapus");
+      const tombolSamadengan = document.querySelector(".samadengan");
+
+      let angkaSaatIni = "";
+      let angkaSebelumnya = "";
+      let operatorSaatIni = "";
+
+      // untuk menampilkan angka yang di click di button kedalam var layar
+      tombolAngka.forEach((button) => {
+        button.addEventListener("click", () => {
+          angkaSaatIni += button.textContent;
+          layar.value = angkaSaatIni;
+        });
+      });
+
+      //pikir sendiri
+      tombolOperasi.forEach((button) => {
+        button.addEventListener("click", () => {
+          angkaSebelumnya = angkaSaatIni;
+          angkaSaatIni = "";
+          operatorSaatIni = button.getAttribute("data-operasi");
+        });
+      });
+
+      hapusButton.addEventListener("click", () => {
+        angkaSaatIni = "";
+        layar.value = angkaSaatIni;
+      });
+
+      //
+      tombolSamadengan.addEventListener("click", () => {
+        if (operatorSaatIni === "+") {
+          const hasil = parseFloat(angkaSebelumnya) + parseFloat(angkaSaatIni);
+          layar.value = hasil;
+        } else if (operatorSaatIni === "-") {
+          const hasil = parseFloat(angkaSebelumnya) - parseFloat(angkaSaatIni);
+          layar.value = hasil;
+        } else if (operatorSaatIni === "*") {
+          const hasil = parseFloat(angkaSebelumnya) * parseFloat(angkaSaatIni);
+          layar.value = hasil;
+        } else if (operatorSaatIni === "/") {
+          const hasil = parseFloat(angkaSebelumnya) / parseFloat(angkaSaatIni);
+          layar.value = hasil;
+        } else if (operatorSaatIni === "%") {
+          const hasil = parseFloat(angkaSebelumnya) % parseFloat(angkaSaatIni);
+          layar.value = hasil;
+        } else if (operatorSaatIni === "hapus") {
+          angkaSaatIni = "";
+          layar.value = "";
+        } else {
+          layar.value = "Kocak lu";
+        }
+
+        angkaSaatIni = "";
+        angkaSebelumnya = "";
+        operatorSaatIni = "";
+      });
+    </script>
+  </body>
+</html>
